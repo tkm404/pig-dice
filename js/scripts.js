@@ -31,16 +31,10 @@ Player.prototype.scoreboard = function(roundSum) {
 	this.roundScore = this.roundScore + roundSum
 }
 
-// Player.prototype.endTurn = function(player, otherPlayer) {
-// 	this.turn = false;
-// 	const 
-// 	for (const key in Game) {
-// 	}
-// }
-
 let totalArray = [];
+let turnBoolean = true;
 Player.prototype.roll = function() {
-	if (this.turn) {
+	if (this.turn === turnBoolean) {
 		const diceArray = [1, 2, 3, 4, 5, 6];
 		let die = diceArray[Math.floor(Math.random() * diceArray.length)];
 		if (die !== 1) {
@@ -60,22 +54,15 @@ Player.prototype.roll = function() {
 			this.collect(0);
 			this.roundScore = this.rounds[this.rounds.length-1];
 			this.roundTotals.push(this.roundScore);
-			this.turn = false;
+			if (this.turn === true) {
+			turnBoolean = false;
+			} else if (this.turn === false) {
+				turnBoolean = true;
+			}
 		}
 	}
 };
 
-
-// Player.prototype.endTurn = function() {
-// 	this.turn = false;
-// 	const object = Game.players;
-// 	console.log(object);
-// 	for (const property in object) {
-// 		if (this !== Game.player.turn) {
-// 			Game.player.turn = true;
-// 		}
-// 	}
-// }
 
 
 let pigDice = new Game();
@@ -84,12 +71,3 @@ let player2 = new Player("John", false);
 
 pigDice.addPlayer(player1);
 pigDice.addPlayer(player2);
-
-function endTurn(currentPlayer) {
-	const object = pigDice.players;
-	for (const key in object) {
-		if (currentPlayer !== key) {
-			console.log("hummus");
-		}
-	}
-}
