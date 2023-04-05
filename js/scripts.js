@@ -30,8 +30,7 @@ Player.prototype.roll = function() {
 		
 		}
 		this.hold(roundTotal);
-		console.log(this.rounds[this.rounds.length]);
-		this.roundScore = this.rounds[this.rounds.length];
+		this.roundScore = roundTotal;
 		// let roundSum = 0;
 		// roundSum = this.rounds.pop();
 		// this.scoreboard(roundSum);
@@ -41,7 +40,9 @@ Player.prototype.roll = function() {
 		totalArray = [];
 		// console.log(die);
 		// console.log(0);
+		let roundTotal = 0;
 		this.hold(0);
+		this.roundScore = roundTotal;
 	}
 };
 
