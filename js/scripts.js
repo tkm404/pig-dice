@@ -22,29 +22,36 @@ Player.prototype.collect = function(roundTotal) {
 };
 
 Player.prototype.endTurn = function() {
-	this.totalScore = 0
-	this.roundTotals.push(this.roundScore);
-	for (let i = 0; i < this.roundTotals.length; i ++) {
-		this.totalScore += this.roundTotals[i];
-	}
+	// let totalScore = 0;
+	let theTotalScore = this.totalScore;
+	let theRoundScore = this.roundScore;
+	let theRoundTotals = this.roundTotals;
+	let theDangTotal = this.rollSum(theRoundScore, theRoundTotals, theTotalScore);
+	this.totalScore = theDangTotal;
+	// console.log(theTotalScore);
+	// this.roundTotals.push(this.roundScore);
+	// for (let i = 0; i < this.roundTotals.length; i ++) {
+	// 	this.totalScore += this.roundTotals[i];
+	// }
+	roundArray = [];
+	this.rounds = [];
+	this.roundScore = 0;
 	if (this.turn === true) {
 		turnBoolean = false;
 		} else if (this.turn === false) {
 			turnBoolean = true;
 		}
-	this.roundScore = 0;
-	roundArray = [];
-	this.rounds = [];
-	console.log(player1);
-	console.log(player2);
-	console.log(turnBoolean);
-}
+};
 
-Player.prototype.win = function() {
-	if (this.totalScore + this.roundScore >= 100) {
-		window.alert(`Congrats, ${this.name}. You win!`);
+Player.prototype.rollSum = function(theScore, theScoreArray, theScoreTotal) {
+	theScoreTotal = 0;
+	theScoreArray.push(theScore);
+	for (let i = 0; i < theScoreArray.length; i ++) {
+		theScoreTotal += theScoreArray[i];
 	}
-}
+	this.rounds.push(theScoreTotal);
+	return theScoreTotal;
+};
 
 let roundArray = [];
 let turnBoolean = true;
@@ -53,28 +60,27 @@ Player.prototype.roll = function() {
 	const diceArray = [1, 2, 3, 4, 5, 6];
 	let die = diceArray[Math.floor(Math.random() * diceArray.length)];
 	if (die !== 1) {
-		roundArray.push(die);
 		let roundTotal = 0;
-		for (let i = 0; i < roundArray.length; i ++) {
-		roundTotal = roundTotal + roundArray[i];
-		}
-		this.collect(roundTotal);
+		this.rollSum(die, roundArray, roundTotal);
+		// roundArray.push(die);
+		// for (let i = 0; i < roundArray.length; i ++) {
+		// roundTotal = roundTotal + roundArray[i];
+		// }
+		// this.collect(roundTotal);
 		this.roundScore = this.rounds[this.rounds.length-1];
 		this.win();
 	}	else {
-		roundArray = [];
 		this.collect(0);
 		this.roundScore = this.rounds[this.rounds.length-1];
 		this.roundTotals.push(this.roundScore);
 		this.rounds = [];
+		roundArray = [];
 		if (this.turn === true) {
-		turnBoolean = false;
+			turnBoolean = false;
 		} else if (this.turn === false) {
 			turnBoolean = true;
 		}
 	}
-	console.log(player1);
-	console.log(player2);
 };
 
 
@@ -91,19 +97,13 @@ pigDice.addPlayer(player2);
 // ------- UI LOGIC vvv ------
 
 function displayGameInfo() {
+document.getElementById("p1RollHistory").innerText = player1.rounds;
+document.getElementById("paraP1RoundScore").innerText = player1.roundScore;
+document.getElementById("paraP1TotalScore").innerText = player1.totalScore;
+document.getElementById("p2RollHistory").innerText = player2.rounds;
+document.getElementById("paraP2RoundScore").innerText = player2.roundScore;
+document.getElementById("paraP2TotalScore").innerText = player2.totalScore;
 
-let rollHistory1 = document.getElementById("p1RollHistory");
-rollHistory1.innerText = player1.rounds;
-let roundScore1 = document.getElementById("paraP1RoundScore");
-roundScore1.innerText = player1.roundScore;
-let totalScore1 = document.getElementById("paraP1TotalScore");
-totalScore1.innerText = player1.totalScore;
-let rollHistory2 = document.getElementById("p2RollHistory");
-rollHistory2.innerText = player2.rounds;
-let roundScore2 = document.getElementById("paraP2RoundScore");
-roundScore2.innerText = player2.roundScore;
-let totalScore2 = document.getElementById("paraP2TotalScore");
-totalScore2.innerText = player2.totalScore;
 }
 
 function playerRoll(event) {
@@ -132,6 +132,13 @@ function playerTurn() {
 	topSpan.innerText =	player1.name;
 	} else if (turnBoolean === false) {
 	topSpan.innerText = player2.name;
+	}
+}
+
+Player.prototype.win = function() {
+	if (this.totalScore + this.roundScore >= 10) {
+		document.querySelector("div#winMessage").removeAttribute("class");
+		document.querySelector("p#youWin").innerText = `Congrats, ${this.name}. You win!`;
 	}
 }
 
