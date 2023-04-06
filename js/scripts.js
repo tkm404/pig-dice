@@ -10,8 +10,8 @@ Game.prototype.addPlayer = function(player) {
 
 function Player(name, turn) {
 	this.name = name;
-	this.rounds = [];
 	this.roundScore = 0;
+	this.rounds = [];
 	this.roundTotals = [];
 	this.totalScore = 0;
 	this.turn = turn;
@@ -21,17 +21,8 @@ Player.prototype.collect = function(roundTotal) {
 	this.rounds.push(roundTotal);
 };
 
-// Player.prototype.stay = function(roundScore) {
-// 	this.roundScore = this.rounds[this.rounds.length-1];
-// 	this.turn = false;
-// }
-
-// Player.prototype.scoreboard = function(roundSum) {
-// 	this.roundScore = this.roundScore + roundSum
-// }
-
-
 Player.prototype.endTurn = function() {
+	this.totalScore = 0
 	this.roundTotals.push(this.roundScore);
 	for (let i = 0; i < this.roundTotals.length; i ++) {
 		this.totalScore += this.roundTotals[i];
@@ -41,7 +32,18 @@ Player.prototype.endTurn = function() {
 		} else if (this.turn === false) {
 			turnBoolean = true;
 		}
+	this.roundScore = 0;
 	roundArray = [];
+	this.rounds = [];
+	console.log(player1);
+	console.log(player2);
+	console.log(turnBoolean);
+}
+
+Player.prototype.win = function() {
+	if (this.totalScore + this.roundScore >= 100) {
+		window.alert(`Congrats, ${this.name}. You win!`);
+	}
 }
 
 let roundArray = [];
@@ -61,12 +63,14 @@ Player.prototype.roll = function() {
 			}
 			this.collect(roundTotal);
 			this.roundScore = this.rounds[this.rounds.length-1];
+			this.win();
 			// this.roundTotals.push(this.roundScore);
 		}	else {
 			roundArray = [];
 			this.collect(0);
 			this.roundScore = this.rounds[this.rounds.length-1];
 			this.roundTotals.push(this.roundScore);
+			this.rounds = [];
 			if (this.turn === true) {
 			turnBoolean = false;
 			} else if (this.turn === false) {
@@ -74,6 +78,8 @@ Player.prototype.roll = function() {
 			}
 		}
 	}
+	console.log(player1);
+	console.log(player2);
 };
 
 
