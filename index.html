@@ -6,6 +6,29 @@
   <title>Pig Dice</title>
 </head>
 <body>
+  <h1>Welcome!</h1>
+
+  <h3>It is <span id="playerTurn"></span>'s Turn</h3>
+  <form id="gameControls">
+    <button type="submit" id="btn-roll">Roll!</button><br><br>
+    <button type="submit" id="btn-endTurn">End Turn</button>
+  </form>
+
+  <div>
+    <h2>Results:</h2>
+    <h4>Jimmy's Score:</h4>
+    <label for="paraP1RoundScore"> For the Round:</label>
+    <h4><em>Roll History: <span id="p1RollHistory"></span></em></h4>
+    <p id="paraP1RoundScore">_____</p>
+    <label for="paraP1TotalScore"> For the Game:</label>
+    <p id="paraP1TotalScore">_____</p>
+    <h4>John's Score:</h4>
+    <label for="paraP2RoundScore"> For the Round:</label>
+    <h4><em>Roll History: <span id="p2RollHistory"></span></em></h4>
+    <p id="paraP2RoundScore">_____</p>
+    <label for="paraP2TotalScore"> For the Game:</label>
+    <p id="paraP2TotalScore">_____</p>
+  </div>
   
 </body>
 </html>

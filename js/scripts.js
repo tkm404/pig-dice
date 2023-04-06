@@ -48,34 +48,29 @@ Player.prototype.win = function() {
 
 let roundArray = [];
 let turnBoolean = true;
+
 Player.prototype.roll = function() {
-	if (this.turn === turnBoolean) {
-		const diceArray = [1, 2, 3, 4, 5, 6];
-		let die = diceArray[Math.floor(Math.random() * diceArray.length)];
-		if (die !== 1) {
-			roundArray.push(die);
-			let roundTotal = 0;
-			for (let i = 0; i < roundArray.length; i ++) {
-			roundTotal = roundTotal + roundArray[i];
-			// console.log(die);
-			// console.log(roundArray);
-			// console.log(roundTotal);
-			}
-			this.collect(roundTotal);
-			this.roundScore = this.rounds[this.rounds.length-1];
-			this.win();
-			// this.roundTotals.push(this.roundScore);
-		}	else {
-			roundArray = [];
-			this.collect(0);
-			this.roundScore = this.rounds[this.rounds.length-1];
-			this.roundTotals.push(this.roundScore);
-			this.rounds = [];
-			if (this.turn === true) {
-			turnBoolean = false;
-			} else if (this.turn === false) {
-				turnBoolean = true;
-			}
+	const diceArray = [1, 2, 3, 4, 5, 6];
+	let die = diceArray[Math.floor(Math.random() * diceArray.length)];
+	if (die !== 1) {
+		roundArray.push(die);
+		let roundTotal = 0;
+		for (let i = 0; i < roundArray.length; i ++) {
+		roundTotal = roundTotal + roundArray[i];
+		}
+		this.collect(roundTotal);
+		this.roundScore = this.rounds[this.rounds.length-1];
+		this.win();
+	}	else {
+		roundArray = [];
+		this.collect(0);
+		this.roundScore = this.rounds[this.rounds.length-1];
+		this.roundTotals.push(this.roundScore);
+		this.rounds = [];
+		if (this.turn === true) {
+		turnBoolean = false;
+		} else if (this.turn === false) {
+			turnBoolean = true;
 		}
 	}
 	console.log(player1);
@@ -90,3 +85,44 @@ let player2 = new Player("John", false);
 
 pigDice.addPlayer(player1);
 pigDice.addPlayer(player2);
+
+
+
+// UI LOGIC vvv
+
+let turnName;
+
+function playerRoll(event) {
+	event.preventDefault();
+	if (turnBoolean === true) {
+		player1.roll();
+	} else if (turnBoolean === false) {
+		player2.roll();
+		}
+	playerTurn(topSpan);
+}
+
+function playerEndTurn(event) {
+	event.preventDefault();
+	if (turnBoolean === true) {
+		player1.endTurn();
+	} else if (turnBoolean === false) {
+		player2.endTurn();
+		}
+}
+
+function playerTurn(topSpan) {
+	if (turnBoolean === true) {
+	topSpan.innerText =	player1.name;
+	} else if (turnBoolean === false) {
+	topSpan.innerText = player2.name;
+	console.log("hummus");
+	}
+}
+
+window.addEventListener("load", function() {
+let topSpan = document.getElementById("playerTurn");
+playerTurn(topSpan);
+document.getElementById("btn-roll").addEventListener("click", playerRoll);
+document.getElementById("btn-endTurn").addEventListener("click", playerEndTurn, playerTurn(topSpan));
+});
