@@ -92,6 +92,8 @@ pigDice.addPlayer(player2);
 
 let turnName;
 
+
+
 function playerRoll(event) {
 	event.preventDefault();
 	if (turnBoolean === true) {
@@ -99,30 +101,32 @@ function playerRoll(event) {
 	} else if (turnBoolean === false) {
 		player2.roll();
 		}
-	playerTurn(topSpan);
+		playerTurn();
 }
 
 function playerEndTurn(event) {
 	event.preventDefault();
 	if (turnBoolean === true) {
 		player1.endTurn();
-	} else if (turnBoolean === false) {
+	} else {
 		player2.endTurn();
 		}
+		playerTurn();
 }
 
-function playerTurn(topSpan) {
+function playerTurn() {
+	let topSpan = document.getElementById("playerTurn");
 	if (turnBoolean === true) {
 	topSpan.innerText =	player1.name;
+	console.log("hummus")
 	} else if (turnBoolean === false) {
 	topSpan.innerText = player2.name;
-	console.log("hummus");
+	console.log("carrots")
 	}
 }
 
 window.addEventListener("load", function() {
-let topSpan = document.getElementById("playerTurn");
-playerTurn(topSpan);
+playerTurn();
 document.getElementById("btn-roll").addEventListener("click", playerRoll);
-document.getElementById("btn-endTurn").addEventListener("click", playerEndTurn, playerTurn(topSpan));
+document.getElementById("btn-endTurn").addEventListener("click", playerEndTurn);
 });
