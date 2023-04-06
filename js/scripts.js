@@ -1,3 +1,21 @@
+// Utility Logic
+
+Player.prototype.rollSum = function(theScore, theScoreArray, theScoreTotal) {
+	theScoreTotal = 0;
+	theScoreArray.push(theScore);
+	for (let i = 0; i < theScoreArray.length; i ++) {
+		theScoreTotal += theScoreArray[i];
+	}
+	this.rounds.push(theScoreTotal);
+	return theScoreTotal;
+};
+
+Player.prototype.collect = function(roundTotal) {
+	this.rounds.push(roundTotal);
+};
+
+
+
 // Business Logic
 
 function Game() {
@@ -10,16 +28,14 @@ Game.prototype.addPlayer = function(player) {
 
 function Player(name, turn) {
 	this.name = name;
-	this.roundScore = 0;
 	this.rounds = [];
+	this.roundScore = 0;
 	this.roundTotals = [];
 	this.totalScore = 0;
 	this.turn = turn;
 }
 
-Player.prototype.collect = function(roundTotal) {
-	this.rounds.push(roundTotal);
-};
+
 
 Player.prototype.endTurn = function() {
 	// let totalScore = 0;
@@ -43,16 +59,6 @@ Player.prototype.endTurn = function() {
 		}
 };
 
-Player.prototype.rollSum = function(theScore, theScoreArray, theScoreTotal) {
-	theScoreTotal = 0;
-	theScoreArray.push(theScore);
-	for (let i = 0; i < theScoreArray.length; i ++) {
-		theScoreTotal += theScoreArray[i];
-	}
-	this.rounds.push(theScoreTotal);
-	return theScoreTotal;
-};
-
 let roundArray = [];
 let turnBoolean = true;
 
@@ -67,11 +73,11 @@ Player.prototype.roll = function() {
 		// roundTotal = roundTotal + roundArray[i];
 		// }
 		// this.collect(roundTotal);
-		this.roundScore = this.rounds[this.rounds.length-1];
+		this.roundScore = this.rounds.pop();
 		this.win();
 	}	else {
 		this.collect(0);
-		this.roundScore = this.rounds[this.rounds.length-1];
+		this.roundScore = this.rounds.pop();
 		this.roundTotals.push(this.roundScore);
 		this.rounds = [];
 		roundArray = [];
@@ -110,7 +116,14 @@ function playerRoll(event) {
 	event.preventDefault();
 	if (turnBoolean === true) {
 		player1.roll();
-	} else if (turnBoolean === false) {
+	} else if (player2.name === "Computer") {
+		player2.roll();
+			if (turnBoolean === false) {
+				player2.roll();
+				player2.endTurn();
+				playerTurn();
+			}
+	} else if (turnBoolean === false && player2.name !== "Computer") {
 		player2.roll();
 		}
 		playerTurn();
@@ -130,13 +143,16 @@ function playerTurn() {
 	let topSpan = document.getElementById("playerTurn");
 	if (turnBoolean === true) {
 	topSpan.innerText =	player1.name;
+	} else if (turnBoolean === false && player2.name === "Computer") {
+		document.getElementById("btn-roll").click();
+		topSpan.innerText = player2.name;
 	} else if (turnBoolean === false) {
-	topSpan.innerText = player2.name;
+		topSpan.innerText = player2.name;
 	}
 }
 
 Player.prototype.win = function() {
-	if (this.totalScore + this.roundScore >= 10) {
+	if (this.totalScore + this.roundScore >= 50) {
 		document.querySelector("div#winMessage").removeAttribute("class");
 		document.querySelector("p#youWin").innerText = `Congrats, ${this.name}. You win!`;
 	}
