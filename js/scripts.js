@@ -88,11 +88,23 @@ pigDice.addPlayer(player2);
 
 
 
-// UI LOGIC vvv
+// ------- UI LOGIC vvv ------
 
-let turnName;
+function displayGameInfo() {
 
-
+let rollHistory1 = document.getElementById("p1RollHistory");
+rollHistory1.innerText = player1.rounds;
+let roundScore1 = document.getElementById("paraP1RoundScore");
+roundScore1.innerText = player1.roundScore;
+let totalScore1 = document.getElementById("paraP1TotalScore");
+totalScore1.innerText = player1.totalScore;
+let rollHistory2 = document.getElementById("p2RollHistory");
+rollHistory2.innerText = player2.rounds;
+let roundScore2 = document.getElementById("paraP2RoundScore");
+roundScore2.innerText = player2.roundScore;
+let totalScore2 = document.getElementById("paraP2TotalScore");
+totalScore2.innerText = player2.totalScore;
+}
 
 function playerRoll(event) {
 	event.preventDefault();
@@ -118,15 +130,15 @@ function playerTurn() {
 	let topSpan = document.getElementById("playerTurn");
 	if (turnBoolean === true) {
 	topSpan.innerText =	player1.name;
-	console.log("hummus")
 	} else if (turnBoolean === false) {
 	topSpan.innerText = player2.name;
-	console.log("carrots")
 	}
 }
 
 window.addEventListener("load", function() {
+
 playerTurn();
 document.getElementById("btn-roll").addEventListener("click", playerRoll);
 document.getElementById("btn-endTurn").addEventListener("click", playerEndTurn);
+document.getElementById("gameControls").addEventListener("click", displayGameInfo);
 });
